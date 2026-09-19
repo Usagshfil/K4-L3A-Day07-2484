@@ -1,0 +1,87 @@
+======================================================================
+BÁO CÁO ĐÁNH GIÁ TRUY XUẤT (BENCHMARK RETRIEVAL REPORT)
+Chiến lược chunking (Strategy) : section
+Backend Embedding              : Gemini (gemini-embedding-001, 3072 dims)
+Số file tài liệu nguồn         : 7
+Tổng số chunk được tạo ra       : 32
+======================================================================
+
+[CÂU HỎI 1]: Hạn mức mượn sách tối đa và thời gian mượn thông thường là bao lâu?
+  * Áp dụng Metadata Filter: {'audience': 'student'}
+  * Tài liệu chuẩn (Gold Doc) : vinuni-lib-undergraduate
+  * Đáp án chuẩn (Gold Answer): Sinh viên được mượn tối đa 3 tài liệu trong thời hạn 14 ngày (2 tuần), được gia hạn 1 lần thêm 14 ngày.
+  Top-1: [score=0.8201] vinuni-lib-undergraduate#1 [GOLD_DOC | KEYWORDS_FOUND]
+          Preview: ## Điều 1. Hạn mức và thời hạn mượn tài liệu  1. Đối với sinh viên đại học (Undergraduate Students):...
+  Top-2: [score=0.7862] vinuni-lib-graduate#1
+          Preview: ## Điều 1. Hạn mức mượn và thời hạn dành cho bậc sau đại học  1. Đối với Học viên Thạc sĩ và Nghiên ...
+  Top-3: [score=0.7850] vinuni-lib-undergraduate#2 [GOLD_DOC]
+          Preview: ## Điều 1. Hạn mức và thời hạn mượn tài liệu     - Thủ tục gia hạn có thể thực hiện trực tuyến qua C...
+  => Đánh giá: 2/2 điểm (Chính xác tuyệt đối (Gold doc tại Top-1 và chứa đầy đủ dữ liệu trả lời))
+
+[CÂU HỎI 2]: Thời hạn mượn các thiết bị công nghệ như laptop hoặc iPad là bao lâu và sau bao nhiêu ngày quá hạn thì thiết bị bị tính là làm mất?
+  * Tài liệu chuẩn (Gold Doc) : vinuni-lib-equipment
+  * Đáp án chuẩn (Gold Answer): Thiết bị mượn trong ngày và phải trả trước giờ đóng cửa 15 phút; quá hạn 5 ngày liên tiếp tính là làm mất và phải đền bù.
+  Top-1: [score=0.8196] vinuni-lib-equipment#3 [GOLD_DOC]
+          Preview: ## Điều 2. Thời hạn mượn và chế tài xử lý vi phạm  1. Thời hạn mượn thiết bị:    - Áp dụng hình thức...
+  Top-2: [score=0.8080] vinuni-lib-equipment#4 [GOLD_DOC]
+          Preview: ## Điều 2. Thời hạn mượn và chế tài xử lý vi phạm     - Trường hợp thiết bị quá hạn quá 5 ngày tính ...
+  Top-3: [score=0.7886] vinuni-lib-equipment#1 [GOLD_DOC]
+          Preview: ## Điều 1. Danh mục thiết bị và điều kiện mượn  1. Thư viện cung cấp dịch vụ mượn ngắn hạn các trang...
+  => Đánh giá: 1/2 điểm (Đạt một phần (Gold doc tại Top-1 nhưng thiếu dữ liệu con số cốt lõi))
+
+[CÂU HỎI 3]: Điều kiện số lượng người tối thiểu để sử dụng phòng học nhóm là bao nhiêu và sau bao lâu không đến nhận phòng thì lượt đặt phòng bị hủy?
+  * Tài liệu chuẩn (Gold Doc) : vinuni-lib-study-rooms
+  * Đáp án chuẩn (Gold Answer): Số lượng tối thiểu là 2 người; vắng mặt sau 10 phút kể từ giờ bắt đầu thì lượt đặt phòng tự động bị hủy (no-show).
+  Top-1: [score=0.7873] vinuni-lib-study-rooms#3 [GOLD_DOC]
+          Preview: ## Điều 2. Quy định về vắng mặt (No-Show Policy) và giữ gìn trật tự  1. Chính sách xử lý vắng mặt (N...
+  Top-2: [score=0.7739] vinuni-lib-study-rooms#2 [GOLD_DOC]
+          Preview: ## Điều 1. Mục đích sử dụng và điều kiện đặt phòng     - Thời lượng tối đa cho mỗi phiên đặt phòng: ...
+  Top-3: [score=0.7698] vinuni-lib-study-rooms#1 [GOLD_DOC]
+          Preview: ## Điều 1. Mục đích sử dụng và điều kiện đặt phòng  1. Hệ thống phòng học nhóm (Group Study Rooms) t...
+  => Đánh giá: 1/2 điểm (Đạt một phần (Gold doc tại Top-1 nhưng thiếu dữ liệu con số cốt lõi))
+
+[CÂU HỎI 4]: Thời gian mượn tối đa và mức phí phạt quá hạn đối với tài liệu dự trữ môn học (Course Reserves) là bao nhiêu?
+  * Tài liệu chuẩn (Gold Doc) : vinuni-lib-fines-reserves
+  * Đáp án chuẩn (Gold Answer): Mượn tại chỗ tối đa 2 giờ/lượt; phí phạt quá hạn là 10.000 VNĐ cho mỗi giờ trễ hạn.
+  Top-1: [score=0.8979] vinuni-lib-fines-reserves#2 [GOLD_DOC]
+          Preview: ## Điều 1. Tài liệu dự trữ môn học (Course Reserves)     - Định mức: Mỗi bạn đọc chỉ được mượn tối đ...
+  Top-2: [score=0.8531] vinuni-lib-fines-reserves#1 [GOLD_DOC]
+          Preview: ## Điều 1. Tài liệu dự trữ môn học (Course Reserves)  1. Mục đích và vị trí:    - Tài liệu dự trữ mô...
+  Top-3: [score=0.8460] vinuni-lib-fines-reserves#0 [GOLD_DOC]
+          Preview: # Quy định về tài liệu dự trữ môn học và biểu phí phạt tại Thư viện VinUniversity...
+  => Đánh giá: 1/2 điểm (Đạt một phần (Gold doc tại Top-1 nhưng thiếu dữ liệu con số cốt lõi))
+
+[CÂU HỎI 5]: Mức phí phạt mượn sách thông thường quá hạn mỗi ngày là bao nhiêu và làm mất sách thì phải đền bù thế nào?
+  * Tài liệu chuẩn (Gold Doc) : vinuni-lib-fines-reserves
+  * Đáp án chuẩn (Gold Answer): Phí phạt trễ hạn sách thông thường là 10.000 VNĐ/ngày/cuốn; làm mất sách phải đền giá mua mới cộng 100.000 VNĐ phí hành chính.
+  Top-1: [score=0.8628] vinuni-lib-fines-reserves#3 [GOLD_DOC]
+          Preview: ## Điều 2. Biểu phí phạt quá hạn thông thường và bồi thường mất mát  1. Phí phạt mượn tài liệu thông...
+  Top-2: [score=0.8268] vinuni-lib-fines-reserves#4 [GOLD_DOC]
+          Preview: ## Điều 2. Biểu phí phạt quá hạn thông thường và bồi thường mất mát     - Cộng thêm khoản phụ phí xử...
+  Top-3: [score=0.7916] vinuni-lib-equipment#3
+          Preview: ## Điều 2. Thời hạn mượn và chế tài xử lý vi phạm  1. Thời hạn mượn thiết bị:    - Áp dụng hình thức...
+  => Đánh giá: 1/2 điểm (Đạt một phần (Gold doc tại Top-1 nhưng thiếu dữ liệu con số cốt lõi))
+
+======================================================================
+TỔNG KẾT ĐIỂM TRUY XUẤT: 6 / 10 điểm (60.0%)
+======================================================================
+
+----------------------------------------------------------------------
+THỬ NGHIỆM A/B LỌC METADATA CHO CÂU HỎI 1
+Query: Hạn mức mượn sách tối đa và thời gian mượn thông thường là bao lâu?
+----------------------------------------------------------------------
+[NHÁNH A - CÓ FILTER audience=student]:
+  Top-1: [score=0.8201] vinuni-lib-undergraduate#1 (audience=student)
+          ## Điều 1. Hạn mức và thời hạn mượn tài liệu  1. Đối với sinh viên đại học (Undergraduate ...
+  Top-2: [score=0.7862] vinuni-lib-graduate#1 (audience=student)
+          ## Điều 1. Hạn mức mượn và thời hạn dành cho bậc sau đại học  1. Đối với Học viên Thạc sĩ ...
+  Top-3: [score=0.7850] vinuni-lib-undergraduate#2 (audience=student)
+          ## Điều 1. Hạn mức và thời hạn mượn tài liệu     - Thủ tục gia hạn có thể thực hiện trực t...
+[NHÁNH B - KHÔNG DÙNG FILTER]:
+  Top-1: [score=0.8201] vinuni-lib-undergraduate#1 (audience=student)
+          ## Điều 1. Hạn mức và thời hạn mượn tài liệu  1. Đối với sinh viên đại học (Undergraduate ...
+  Top-2: [score=0.8106] vinuni-lib-staff#2 (audience=staff)
+          ## Điều 1. Đối tượng áp dụng và hạn mức mượn     - Gia hạn: Được gia hạn trực tuyến 1 lần ...
+  Top-3: [score=0.7978] vinuni-lib-faculty#1 (audience=faculty)
+          ## Điều 1. Hạn mức mượn và thời hạn ưu đãi  1. Đối với Giảng viên toàn thời gian, Giáo sư ...
+----------------------------------------------------------------------
