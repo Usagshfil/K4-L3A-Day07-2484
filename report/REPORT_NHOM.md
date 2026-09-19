@@ -14,31 +14,40 @@
 
 ### Chủ đề (Domain) & Lý Do Chọn
 
-**Chủ đề:** [ví dụ: Customer support FAQ, Luật Việt Nam, công thức nấu ăn, ...]
+**Chủ đề:** Quy định & Dịch vụ Thư viện Đại học VinUniversity (VinUniversity Library Policies & Services)
 
 **Tại sao nhóm chọn chủ đề này?**
-> *Viết 2-3 câu:*
+> Thư viện VinUniversity là trung tâm học liệu hiện đại với hệ thống quy định được chuẩn hóa theo chuẩn quốc tế (Cornell/UPenn), phục vụ đa dạng nhóm độc giả trong khuôn viên trường. Điểm đặc sắc nhất của chủ đề này là sự phân cấp đặc quyền mượn tài liệu cực kỳ rõ rệt giữa các nhóm đối tượng (Sinh viên đại học mượn tối đa 3 cuốn/2 tuần, Học viên cao học mượn 5 cuốn/1 tháng, trong khi Giảng viên được mượn 5 cuốn/lên đến 6 tháng). Sự phân định rõ rệt này là kịch bản hoàn hảo nhất để kiểm chứng vai trò của siêu dữ liệu (`metadata_filter={"audience": "student"}`) trong việc ngăn chặn lẫn lộn thông tin giữa các nhóm độc giả.
 
 ### Danh sách tài liệu (Data Inventory)
 
 | # | Tên tài liệu | Nguồn (Source URL) | Ngày lấy / Phiên bản | Số ký tự | Metadata đã gán |
 |---|--------------|------------|--------------------|----------|-----------------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
+| 1 | vinuni-lib-undergraduate.md | https://library.vinuni.edu.vn/services/borrow-and-request/undergraduate-and-staff/ | 2026-09-19 / 2026.1 | 1799 | audience: student, department: library, category: circulation |
+| 2 | vinuni-lib-faculty.md | https://library.vinuni.edu.vn/services/borrow-and-request/graduate-faculty-and-instructors/ | 2026-09-19 / 2026.1 | 1578 | audience: faculty, department: library, category: circulation |
+| 3 | vinuni-lib-graduate.md | https://library.vinuni.edu.vn/borrowing-priviledge/ | 2026-09-19 / 2026.1 | 1488 | audience: student, department: library, category: circulation |
+| 4 | vinuni-lib-staff.md | https://library.vinuni.edu.vn/services/borrow-and-request/undergraduate-and-staff/ | 2026-09-19 / 2026.1 | 1502 | audience: staff, department: library, category: circulation |
+| 5 | vinuni-lib-equipment.md | https://library.vinuni.edu.vn/services/equipment-loan/ | 2026-09-19 / 2026.1 | 1749 | audience: all, department: library, category: equipment |
+| 6 | vinuni-lib-study-rooms.md | https://library.vinuni.edu.vn/room-booking/ | 2026-09-19 / 2026.1 | 1997 | audience: student, department: library, category: facilities |
+| 7 | vinuni-lib-fines-reserves.md | https://library.vinuni.edu.vn/fine-and-other-charges/ | 2026-09-19 / 2026.1 | 1878 | audience: all, department: library, category: fines |
 
 **Danh sách kiểm tra quản trị dữ liệu (Data governance checklist):**
-- [ ] Tập tài liệu (Corpus) chỉ chứa nguồn công khai/được phép dùng và không chứa dữ liệu cá nhân, thông tin đăng nhập hoặc tài liệu nội bộ.
-- [ ] Mỗi tài liệu có `source_url`, `retrieved_at`, `document_version` (hoặc ngày hiệu lực) trong metadata.
+- [x] Tập tài liệu (Corpus) chỉ chứa nguồn công khai/được phép dùng và không chứa dữ liệu cá nhân, thông tin đăng nhập hoặc tài liệu nội bộ.
+- [x] Mỗi tài liệu có `source_url`, `retrieved_at`, `document_version` (hoặc ngày hiệu lực) trong metadata.
 
 ### Cấu trúc Metadata (Metadata Schema)
 
 | Trường metadata | Kiểu | Ví dụ giá trị | Tại sao hữu ích cho truy xuất (retrieval)? |
 |----------------|------|---------------|-------------------------------|
-| | | | |
-| | | | |
+| `doc_id` | str | `vinuni-lib-undergraduate` | Định danh duy nhất cho từng tài liệu thư viện, phục vụ truy vết xuất xứ và lệnh xóa (`delete_document`). |
+| `title` | str | `Chính sách mượn trả tài liệu cho sinh viên...` | Tiêu đề văn bản giúp người dùng nhận biết ngay quy định tương ứng khi agent phản hồi. |
+| `audience` | str | `student`, `faculty`, `staff`, `all` | **Trường cốt lõi để lọc trước (pre-filtering)**: giúp phân biệt hạn mức mượn giữa sinh viên (2 tuần) vs giảng viên (6 tháng) vs nhân viên. |
+| `department` | str | `library` | Xác định đơn vị quản lý nghiệp vụ, phục vụ mở rộng hệ thống RAG đa phòng ban trong toàn trường. |
+| `category` | str | `circulation`, `equipment`, `facilities`, `fines` | Khoanh vùng danh mục dịch vụ thư viện (lưu thông tài liệu, thiết bị, phòng học nhóm, xử lý phạt). |
+| `source_url` | str | `https://library.vinuni.edu.vn/...` | Link tham chiếu chính thức trên trang thư viện VinUni để kiểm chứng tính xác thực (Grounding). |
+| `retrieved_at` | str | `2026-09-19` | Quản lý thời điểm lấy dữ liệu, đảm bảo tài liệu phản ánh đúng quy định thư viện mới nhất. |
+| `document_version` | str | `2026.1` | Quản lý phiên bản quy chế áp dụng cho năm học hiện hành. |
+| `language` | str | `vi` | Định danh ngôn ngữ để hỗ trợ tiền xử lý và nhúng vector đa ngữ. |
 
 ---
 

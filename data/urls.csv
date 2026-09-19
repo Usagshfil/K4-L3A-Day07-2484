@@ -1,0 +1,8 @@
+url,doc_id,title,audience,department,category,language,document_version,license_or_permission
+https://library.vinuni.edu.vn/services/borrow-and-request/undergraduate-and-staff/,vinuni-lib-undergraduate,Chính sách mượn trả tài liệu cho sinh viên đại học VinUniversity,student,library,circulation,vi,2026.1,public-source
+https://library.vinuni.edu.vn/services/borrow-and-request/graduate-faculty-and-instructors/,vinuni-lib-faculty,Chính sách mượn trả tài liệu dành cho giảng viên và nghiên cứu viên VinUniversity,faculty,library,circulation,vi,2026.1,public-source
+https://library.vinuni.edu.vn/borrowing-priviledge/,vinuni-lib-graduate,Đặc quyền mượn tài liệu dành cho học viên cao học và nghiên cứu sinh VinUniversity,student,library,circulation,vi,2026.1,public-source
+https://library.vinuni.edu.vn/services/borrow-and-request/undergraduate-and-staff/,vinuni-lib-staff,Quy định mượn tài liệu thư viện dành cho cán bộ nhân viên VinUniversity,staff,library,circulation,vi,2026.1,public-source
+https://library.vinuni.edu.vn/services/equipment-loan/,vinuni-lib-equipment,Quy định mượn trang thiết bị công nghệ tại Thư viện VinUniversity,all,library,equipment,vi,2026.1,public-source
+https://library.vinuni.edu.vn/room-booking/,vinuni-lib-study-rooms,Quy chế đặt và sử dụng phòng học nhóm tại Thư viện VinUniversity,student,library,facilities,vi,2026.1,public-source
+https://library.vinuni.edu.vn/fine-and-other-charges/,vinuni-lib-fines-reserves,Quy định về tài liệu dự trữ môn học và biểu phí phạt tại Thư viện VinUniversity,all,library,fines,vi,2026.1,public-source
