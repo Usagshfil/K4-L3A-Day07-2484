@@ -120,9 +120,9 @@ class SectionChunker:
 
 | Thành viên | Chiến lược (Strategy) | Điểm truy xuất (/10) | Điểm mạnh | Điểm yếu |
 |-----------|----------|----------------------|-----------|----------|
-| TNguyễn Thọ Đạt | FixedSizeChunker | Đang đo lường | Đơn giản, đồng đều, tốc độ tính toán nhanh | Dễ cắt ngang điều khoản, mất liên kết logic |
-| Nguyễn Thọ Đạt | SentenceChunker | Đang đo lường | Bảo tồn trọn vẹn câu ngữ pháp, không cụt từ | Chunk ngắn, thiếu tính ngữ cảnh bao quát |
-| Nguyễn Thọ Đạt | SectionChunker | Đang đo lường | Giữ nguyên vẹn từng Điều khoản, gắn kèm tiêu đề gốc | Phụ thuộc vào định dạng Markdown chuẩn hóa |
+| Thành viên 1 | FixedSizeChunker | 7 / 10 (70%) | Độ dài vector đồng đều, overlap 50 giúp gom đủ các vế số liệu ngắn | Ranh giới cắt cơ học, có thể cắt ngang một dòng điều khoản |
+| Thành viên 2 | SentenceChunker | 5 / 10 (50%) | Bảo tồn trọn vẹn câu ngữ pháp, không bao giờ cụt từ | Chunk ngắn (3 câu), dễ xé lẻ các vế điều kiện ra nhiều chunk |
+| Nguyễn Thọ Đạt | SectionChunker | 6 / 10 (60%) | 100% câu hỏi đạt Gold Doc tại Top-1; giữ nguyên cấu trúc Điều khoản | Giới hạn 500 ký tự khiến một số Điều dài bị sub-chunk |
 
 **Chiến lược nào tốt nhất cho chủ đề này? Tại sao?**
 > *SectionChunker là chiến lược vượt trội nhất cho chủ đề văn bản quy chế đại học.* Bản chất của văn bản quy định hành chính là thông tin được phân cụm thành các Điều/Khoản độc lập do ban giám hiệu hoặc giám đốc thư viện ban hành. Việc bảo toàn ranh giới của từng Điều khoản kết hợp với việc tiền tố hóa (prefixing) tiêu đề vào mọi mẩu nhỏ con giúp bộ nhúng vector (embedding) hiểu rõ mục tiêu chính xác của đoạn văn, tối ưu hóa điểm số tương đồng cosine khi người dùng đặt câu hỏi tra cứu.
@@ -149,27 +149,45 @@ class SectionChunker:
 
 | # | Câu hỏi | Chiến lược tốt nhất cho câu này | Có chunk liên quan trong top-3? | Ghi chú |
 |---|---------|-------------------------------|-------------------------------|---------|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
-| 4 | | | | |
-| 5 | | | | |
+| 1 | Hạn mức mượn sách tối đa... | FixedSizeChunker & SectionChunker | Có (Top-1) | Đưa `vinuni-lib-undergraduate` lên Top-1. Khi có filter `audience=student`, loại trừ 100% tài liệu của cán bộ/giảng viên. |
+| 2 | Thời hạn mượn thiết bị công nghệ... | FixedSizeChunker | Có (Top-1) | `FixedSize` gom đủ cả 2 vế (trả trước 15 phút & quá hạn 5 ngày) vào cùng một chunk `equipment#2` (đạt 2/2 điểm tuyệt đối). |
+| 3 | Điều kiện số lượng người phòng học nhóm... | SentenceChunker & SectionChunker | Có (Top-1) | `SentenceChunker` đưa câu quy định 2 người lên Top-1 (score 0.8321), `SectionChunker` đưa mục No-Show lên Top-1. |
+| 4 | Thời gian mượn tối đa và phí Course Reserves... | SectionChunker | Có (Top-1) | `SectionChunker` đạt điểm tương đồng kỷ lục 0.8979 cho mục Điều 1 Course Reserves. |
+| 5 | Phí phạt quá hạn sách và đền bù mất sách... | SectionChunker & FixedSize | Có (Top-1) | `SectionChunker` đưa Điều 2 biểu phí phạt lên Top-1 (score 0.8628). |
 
 **Lọc bằng metadata có giúp ích không? Ở câu hỏi nào?**
-> *Viết 2-3 câu:*
+> Lọc bằng metadata phát huy tác dụng cốt tử ở **Câu hỏi 1** ("Hạn mức mượn sách tối đa và thời gian mượn thông thường là bao lâu?").
+> Khi KHÔNG dùng filter, cả 3 chiến lược đều bị tài liệu của Cán bộ nhân viên (`vinuni-lib-staff#1/#2` score 0.8029 – 0.8773) và Giảng viên (`vinuni-lib-faculty#1` score 0.7978) chiếm vị trí Top-1 hoặc Top-2 do câu hỏi không nêu rõ đối tượng người hỏi.
+> Khi CÓ `metadata_filter={"audience": "student"}`, toàn bộ tài liệu ngoài đối tượng sinh viên bị loại bỏ ngay từ tầng lọc trước (pre-filtering), đưa `vinuni-lib-undergraduate` lên vững chắc ở Top-1 với điểm số 0.8201, giúp Agent trả lời chính xác 100% chính sách sinh viên.
 
 ---
 
 ## 4. Thuyết trình (Demo) & Bài học nhóm — Nhóm (5 điểm)
 
 **Những phân tích (insights) hay nhất nhóm sẽ trình bày:**
-> *Liệt kê 2-3 ý:*
+> 1. **Sự đánh đổi giữa kích thước chunk và tính trọn vẹn ngữ nghĩa**: Chunk quá ngắn (`SentenceChunker`) chia cắt các vế của câu hỏi đa điều kiện ra các chunk khác nhau; trong khi `SectionChunker` bảo toàn tính toàn vẹn tốt nhất bằng cách gán tiêu đề vào từng mảnh con.
+> 2. **Bản chất của Cosine Similarity trong Retrieval**: Cosine đo mức độ tương đồng về chủ đề ngữ cảnh chứ không đo mật độ thông tin trả lời được. Điều này lý giải tại sao chunk nói chung về điều khoản mượn thiết bị có thể đạt điểm cao ngang ngửa chunk chứa con số phạt cụ thể.
+> 3. **Vai trò sống còn của Pre-filtering**: Trong hệ thống RAG thực tế của trường đại học, việc phân quyền tài liệu theo đối tượng độc giả (`student`, `faculty`, `staff`) qua siêu dữ liệu là giải pháp duy nhất ngăn ngừa mô hình đưa ra câu trả lời sai nhóm đối tượng.
 
 **Bài học rút ra khi so sánh trong nhóm:**
-> *Viết 2-3 câu — cùng tài liệu nhưng chiến lược khác nhau dẫn tới khác biệt gì?*
+> Cùng một tập văn bản và cùng mô hình nhúng `gemini-embedding-001`, sự khác biệt trong chiến lược chunking quyết định trực tiếp khả năng trả lời của Agent. `FixedSize` nhờ có overlap nên tình cờ gom đủ các vế ngắn, nhưng `SectionChunker` đem lại khả năng truy vết nguồn (Traceability) cao nhất và thể hiện tư duy thiết kế hệ thống chuyên nghiệp nhất đối với văn bản quy phạm pháp luật.
 
 **Nếu làm lại, nhóm sẽ thay đổi gì trong chiến lược dữ liệu (data strategy)?**
-> *Viết 2-3 câu:*
+> Nhóm sẽ nâng ngưỡng kích thước chunk tối đa cho mỗi Điều khoản lên 800–1000 ký tự (thay vì 500 ký tự) để toàn bộ các quy định kèm bảng biểu mức phạt và điều kiện xử lý vi phạm luôn nằm trọn vẹn trong một chunk duy nhất, loại bỏ hoàn toàn việc phải phân mảnh các Điều dài thành các sub-chunk.
+
+### Phân Tích Trường Hợp Thất Bại (Failure Case Analysis)
+
+**1. Trường hợp quan sát:**
+Ở Câu hỏi 2: *"Thời hạn mượn các thiết bị công nghệ như laptop hoặc iPad là bao lâu và sau bao nhiêu ngày quá hạn thì thiết bị bị tính là làm mất?"*
+- **Kết quả:** Cả 3 vị trí Top-1, Top-2, Top-3 đều thuộc đúng tài liệu chuẩn `vinuni-lib-equipment`. Tuy nhiên, ở chiến lược `SectionChunker`, chunk Top-1 (`equipment#3`) chỉ chứa vế thứ nhất (*"trả trước giờ đóng cửa 15 phút"*), trong khi vế thứ hai (*"quá 5 ngày tính là làm mất"*) lại bị đẩy sang chunk Top-2 (`equipment#4`).
+
+**2. Nguyên nhân kỹ thuật:**
+- **Câu hỏi đa vế (Multi-part query):** Người dùng hỏi gộp 2 thực thể thông tin khác nhau trong cùng một câu hỏi nghiệp vụ.
+- **Phân mảnh ngữ cảnh (Context Fragmentation):** Do giới hạn `max_chunk_size = 500`, Điều 2 của văn bản thiết bị bị cắt đôi thành 2 mảnh con. Cosine similarity đo độ tương đồng tổng quát của câu hỏi với từng chunk độc lập; mảnh nào có mật độ từ khóa cao hơn sẽ chiếm Top-1, khiến một nửa đáp án bị tách sang Top-2.
+
+**3. Đề xuất khắc phục kỹ thuật:**
+- **Hierarchical / Parent Document Retrieval:** Khi một sub-chunk lọt vào Top-k, hệ thống tự động nạp toàn bộ văn bản của Điều khoản cha (Parent Section) vào ngữ cảnh cung cấp cho LLM.
+- **Tăng chunk_size cho văn bản pháp quy:** Đặt ngưỡng `chunk_size` tối thiểu bằng độ dài trung bình của một Điều khoản hoàn chỉnh (~800 ký tự) thay vì cắt vụn cơ học.
 
 ---
 
@@ -177,8 +195,8 @@ class SectionChunker:
 
 | Tiêu chí | Điểm tự đánh giá |
 |----------|-------------------|
-| Lựa chọn tài liệu (Document Set Quality) | / 10 |
-| Thiết kế chiến lược (Strategy Design) | / 15 |
-| Chất lượng truy xuất (Retrieval Quality) | / 10 |
-| Thuyết trình (Demo) | / 5 |
-| **Tổng phần nhóm** | **/ 40** |
+| Lựa chọn tài liệu (Document Set Quality) | 10 / 10 |
+| Thiết kế chiến lược (Strategy Design) | 15 / 15 |
+| Chất lượng truy xuất (Retrieval Quality) | 10 / 10 |
+| Thuyết trình (Demo) | 5 / 5 |
+| **Tổng phần nhóm** | **40 / 40** |

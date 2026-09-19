@@ -152,33 +152,33 @@ tests/test_solution.py::TestEmbeddingStoreDeleteDocument::test_delete_returns_tr
 
 | Cặp | Câu A | Câu B | Dự đoán | Điểm thực tế | Đúng? |
 |------|-----------|-----------|---------|--------------|-------|
-| 1 | | | cao / thấp | | |
-| 2 | | | cao / thấp | | |
-| 3 | | | cao / thấp | | |
-| 4 | | | cao / thấp | | |
-| 5 | | | cao / thấp | | |
+| 1 | Sinh viên đại học được phép mượn tối đa 3 tài liệu trong thời hạn 14 ngày. | Hạn mức mượn sách cho người học bậc cử nhân là ba cuốn với thời gian hai tuần. | cao | 0.8590 | Đúng |
+| 2 | Độc giả làm mất sách phải bồi thường toàn bộ chi phí mua mới kèm theo 100.000 VNĐ phí hành chính. | Trường hợp đánh mất tài liệu thư viện, người mượn phải đền tiền mua sách mới và nộp thêm khoản phụ phí xử lý một trăm nghìn đồng. | cao | 0.8980 | Đúng |
+| 3 | Sinh viên đại học được phép mượn tối đa 3 tài liệu trong thời hạn 14 ngày. | Hệ thống phòng tự học được trang bị máy điều hòa không khí và kết nối internet không dây tốc độ cao. | thấp | 0.6309 | Đúng |
+| 4 | Độc giả không được mang thức ăn có mùi và đồ uống không có nắp vào thư viện. | Bạn đọc phải giữ trật tự chung và không gây ồn ào tại khu vực học tập yên tĩnh. | trung bình / thấp | 0.7453 | Đúng |
+| 5 | Tài liệu dự trữ môn học chỉ được sử dụng tại chỗ tối đa trong 2 giờ. | Giảng viên được mượn tài liệu nghiên cứu về nhà với thời hạn lên tới 6 tháng. | thấp | 0.7857 | Bất ngờ (cao hơn dự kiến) |
 
 **Kết quả nào bất ngờ nhất? Điều này nói gì về cách embeddings biểu diễn ý nghĩa?**
-> *Viết 2-3 câu:*
+> Kết quả ở Cặp 5 gây bất ngờ nhất: dù mang tính đối lập hoàn toàn về đối tượng và thời hạn áp dụng (tài liệu dự trữ đọc tại chỗ 2 giờ vs giảng viên mượn tài liệu về nhà 6 tháng), điểm cosine tương đồng vẫn đạt tới 0.7857. Điều này chứng minh embedding biểu diễn sự tương đồng về "trường chủ đề" (cùng đề cập đến hành vi mượn tài liệu thư viện kèm con số thời gian) thay vì kiểm định chân lý hay mối quan hệ logic đối lập.
 
 ---
 
 ## 5. Kết quả truy xuất của tôi (Competition Results) — Cá nhân (10 điểm)
 
-Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
+Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src` (sử dụng chiến lược `SectionChunker` và backend `gemini-embedding-001`).
 
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 |---|-------|--------------------------------|-------|-----------|------------------------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
+| 1 | Hạn mức mượn sách tối đa và thời gian mượn thông thường là bao lâu? *(Filter: student)* | `vinuni-lib-undergraduate#1` (Hạn mức sinh viên: tối đa 3 tài liệu trong 14 ngày, gia hạn 1 lần) | 0.8201 | Có | Sinh viên được mượn tối đa 3 tài liệu trong thời hạn 14 ngày, được phép gia hạn 1 lần thêm 14 ngày. |
+| 2 | Thời hạn mượn các thiết bị công nghệ như laptop hoặc iPad là bao lâu và sau bao nhiêu ngày quá hạn thì thiết bị bị tính là làm mất? | `vinuni-lib-equipment#3` (Mượn thiết bị trong ngày, trả trước giờ đóng cửa 15 phút, quá 5 ngày tính là mất) | 0.8196 | Có | Thiết bị công nghệ mượn trong ngày và phải trả trước giờ đóng cửa 15 phút; quá hạn 5 ngày tính là mất và phải đền bù. |
+| 3 | Điều kiện số lượng người tối thiểu để sử dụng phòng học nhóm là bao nhiêu và sau bao lâu không đến nhận phòng thì lượt đặt phòng bị hủy? | `vinuni-lib-study-rooms#3` (No-Show Policy: tối thiểu 2 người, hủy đặt sau 10 phút vắng mặt) | 0.7873 | Có | Số lượng người tối thiểu là 2 người; nếu sau 10 phút vắng mặt thì lượt đặt phòng tự động bị hủy và bàn giao cho nhóm khác. |
+| 4 | Thời gian mượn tối đa và mức phí phạt quá hạn đối với tài liệu dự trữ môn học (Course Reserves) là bao nhiêu? | `vinuni-lib-fines-reserves#2` (Định mức mượn tối đa 2 tài liệu dự trữ tại chỗ; phạt quá hạn 10.000 VNĐ/giờ) | 0.8979 | Có | Thời gian mượn tài liệu dự trữ tối đa là 2 giờ đọc tại chỗ; mức phí phạt quá hạn là 10.000 VNĐ cho mỗi giờ trễ hạn. |
+| 5 | Mức phí phạt mượn sách thông thường quá hạn mỗi ngày là bao nhiêu và làm mất sách thì phải đền bù thế nào? | `vinuni-lib-fines-reserves#3` (Phạt trễ hạn sách thông thường 10.000 VNĐ/ngày; mất sách đền giá mua mới + 100.000 VNĐ) | 0.8628 | Có | Phạt quá hạn 10.000 VNĐ/ngày/cuốn; làm mất sách phải bồi thường toàn bộ giá mua mới cộng thêm 100.000 VNĐ phí hành chính. |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** __ / 5
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 5 / 5
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
-> *Viết 2-3 câu:*
+> Chiến lược `SectionChunker` đem lại độ rõ ràng cao nhất nhờ giữ nguyên vẹn cấu trúc từng Điều khoản và gắn kèm tiêu đề gốc cho từng mảnh con. Ngoài ra, thử nghiệm A/B trên Câu 1 đã chứng minh đanh thép rằng lọc trước bằng metadata (`audience: student`) là lá chắn bắt buộc để ngăn chặn mô hình truy xuất nhầm hạn mức 6 tháng của giảng viên hoặc 3 cuốn của nhân viên.
 
 ---
 
@@ -186,9 +186,9 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 
 | Tiêu chí | Điểm tự đánh giá |
 |----------|-------------------|
-| Khởi động (Warm-up) | / 5 |
-| Hướng tiếp cận của tôi (My Approach) | / 10 |
-| Hoàn thiện code (Core Implementation — tests) | / 30 |
-| Dự đoán độ tương tự (Similarity Predictions) | / 5 |
-| Kết quả truy xuất của tôi (Competition Results) | / 10 |
-| **Tổng phần cá nhân** | **/ 60** |
+| Khởi động (Warm-up) | 5 / 5 |
+| Hướng tiếp cận của tôi (My Approach) | 10 / 10 |
+| Hoàn thiện code (Core Implementation — tests) | 30 / 30 |
+| Dự đoán độ tương tự (Similarity Predictions) | 5 / 5 |
+| Kết quả truy xuất của tôi (Competition Results) | 10 / 10 |
+| **Tổng phần cá nhân** | **60 / 60** |
